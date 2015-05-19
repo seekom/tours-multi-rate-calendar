@@ -1,0 +1,44 @@
+<html>
+	<!-- 
+	This page is on the same domain as the parent, so can
+	communicate with it to order the iframe window resizing
+	to fit the content 
+	-->
+	<body onload="parentIframeResize()">
+		<script language="javascript" type="text/javascript">
+		
+			// If your Seekom booking page iFrame uses dynamic resizing then specify the location of your Host Message Agent file here
+			// EG myMsgAent = 'mywebsite.com/SeekomMessageAgent.html' - NB Do not specify preceding "http://"
+			var MyMsgAgent = '';
+		
+			// Tell the parent iframe what height the iframe needs to be
+			function parentIframeResize()
+			{
+			   var height = getParam('height');
+			   // This works as our parent's parent is on our domain..
+			   parent.parent.resizeIframe(height);
+			}
+			
+			// Helper function, parse param from request string
+			function getParam( name )
+			{
+			  	name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+			  	var regexS = "[\\?&]"+name+"=([^&#]*)";
+			  	var regex = new RegExp( regexS );
+			  	var results = regex.exec( window.location.href );
+			  	if( results == null )
+			    	return "";
+			  	else
+			    	return results[1];
+			}
+
+			function LoadSeekomFrame(frameId)
+			{
+				var frame = document.getElementById(frameId);
+				var sep = window.location.search == '' ? '?' : '&';
+				frame.src = window.location.protocol + '//ibex.seekom.com/accommodation/Property.php' + window.location.search +
+							(MyMsgAgent == '' ? '' : (sep + 'hostma=' + window.location.protocol + '//' + escape(MyMsgAgent)));
+			}
+		</script>
+	</body>
+</html>
